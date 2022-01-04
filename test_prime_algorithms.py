@@ -53,3 +53,10 @@ def print_results(operation):
         else:
             number = ('%d\t' % number) if not isPrime(number, operation) else '\033[92m[%d]\033[00m\t' % number
             row = row + number
+
+def main():
+    ''' Test some examples '''
+    print_results('0 == 2 - ((2 ** number) % number)')
+
+if __name__ == "__main__":
+    main()
