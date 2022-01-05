@@ -1,7 +1,7 @@
 ''' Generate and test algorithms '''
 import random
 
-def algorithm_generator(tested_algorithm_list):
+def algorithm_generator(tested_algorithm_list, statements=True):
     ''' Returns an algorithm. Examples:
     0 == 3 ** number % number
     0 < 1 - number ** number
@@ -9,10 +9,13 @@ def algorithm_generator(tested_algorithm_list):
     '''
     comparions = ['==', '>']
     logic = ['*', '-', '+', '%', '**']
-    operators =  comparions + logic
-    numbers = ['number', '-3', '-2', '-1', '1', '2', '3', '0']
+    if statements:
+        operators =  comparions + logic
+    else:
+        operators = logic
+    numbers = ['number', '0.5', '-3', '-2', '-1', '1', '2', '3', '4', '5', '0']
     operation_list = []
-    statement_ready = False
+    statement_ready = False if statements else True
     number_ready = False
     index = 0
     while True:
@@ -55,15 +58,15 @@ def algorithm(number, algo):
         print(number, algo, error)
         return False
 
-def test_algorithms(test_list, tested_algorithm_list, complexity=1):
+def test_algorithms(test_list, tested_algorithm_list, complexity=1, statements=True):
     ''' Test algorithm with true and false samples '''
     algo = ''
     for index in range(1, complexity + 1):
         if index == 1:
-            part_algo = algorithm_generator(tested_algorithm_list)
+            part_algo = algorithm_generator(tested_algorithm_list, statements)
             algo = '(' + part_algo + ')'
         else:
-            part_algo = algorithm_generator(tested_algorithm_list)
+            part_algo = algorithm_generator(tested_algorithm_list, statements)
             algo = algo + random.choice([' and ', ' or ']) + '(' + part_algo + ')'
     for test in test_list:
         number = test[0]
