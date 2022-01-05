@@ -24,12 +24,10 @@ def isprime(number):
             return False
     return True
 
-def print_results(operation):
-    ''' Print test results '''
-    count = 10000
+def test_false_positives_and_negatives(operation, count=10000):
+    ''' Test numbers from 11 to count '''
     false_negatives = []
     false_positives = []
-
     for number in range(11, count):
         truth = isprime(number)
         test = isPrime(number, operation)
@@ -37,13 +35,15 @@ def print_results(operation):
             false_negatives.append(number)
         if not truth and test:
             false_positives.append(number)
-
     print('Tests %d' % count)
     print('False negatives %d' % len(false_negatives))
     print(false_negatives[0:20])
     print('False positives %d' % len(false_positives))
     print(false_positives[0:20])
 
+def print_results(operation):
+    ''' Print test results '''
+    test_false_positives_and_negatives(operation, count=10000)
     row = ''
     multiplier = 12
     for number in range(6, 100):
@@ -58,7 +58,8 @@ def print_results(operation):
 
 def main():
     ''' Test some examples '''
-    print_results('0 == 2 - ((2 ** number) % number)')
+    algo = '0 == 2 - ((2 ** number) % number)'
+    print_results(algo)
 
 if __name__ == "__main__":
     main()
