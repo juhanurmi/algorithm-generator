@@ -14,7 +14,8 @@ false_prime_list = [22, 25, 27, 30, 35, 49, 77]
 true_prime_list = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53]
 
 while True:
-  working_algorithm = test_algorithms(true_prime_list, false_prime_list, tested_algorithm_list)
+  # True example list, False example list, list of tested algorithms, complexity (how many AND/OR parts)
+  working_algorithm = test_algorithms(true_prime_list, false_prime_list, tested_algorithm_list, complexity=2)
   if working_algorithm:
     print(working_algorithm)
 ```

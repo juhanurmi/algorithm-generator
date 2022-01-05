@@ -1,3 +1,5 @@
+''' Simple way to test isPrime algorithms '''
+
 def isPrime(number, operation):
     '''
     This is a test prime testing algorithm, for example:
@@ -15,10 +17,10 @@ def isPrime(number, operation):
     '''
     return eval(operation)
 
-def isprime(num):
+def isprime(number):
     ''' This is a working prime number testing algorithm '''
-    for n in range(2, int(num**1/2) + 1):
-        if num % n == 0:
+    for index in range(2, int(number**1/2) + 1):
+        if number % index == 0:
             return False
     return True
 
