@@ -19,10 +19,11 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
             numbers.append('number')
         else:
             numbers.append('number' + str(index))
-    numbers = numbers + ['-6', '-5', '-4', '-3', '-2', '-1', '1', '2', '3', '4', '5', '6', '0']
+    numbers = numbers + ['-3', '-2', '-1', '1', '2', '3', '0']
     operation_list = []
     statement_ready = False if statements else True
     number_ready = False
+    closed_brackets = True
     index = 0
     while True:
         index = index + 1
@@ -40,9 +41,15 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
                     operators.remove(comp)
             if operator == '**': # Use ** only once
                 operators.remove(operator)
+
+            if closed_brackets and random.choice([True, False]):
+                operation_list.append('(')
+                closed_brackets = False
+
         else:
-            if operation_list and operation_list[-1] == '%':
-                number = random.choice(numbers[0:-1]) # Without zero!
+            if operation_list:
+                if operation_list[-1] == '%' or operation_list[-1] == '(':
+                    number = random.choice(numbers[0:-1]) # Without zero!
             else:
                 number = random.choice(numbers)
 
@@ -50,10 +57,16 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
 
             if not number_ready and number == 'number':
                 number_ready = True
-            if statement_ready and number_ready:
+
+            if not closed_brackets:
+                operation_list.append(')')
+                closed_brackets = True
+
+            if statement_ready and number_ready and closed_brackets:
                 algo = ' '.join(operation_list)
-                if not algo in tested_algorithm_list:
-                    tested_algorithm_list.append(algo)
+                algohash = hash(algo)
+                if not algohash in tested_algorithm_list:
+                    tested_algorithm_list.append(algohash)
                     return algo
 
 def algorithm(input, output, algo):
