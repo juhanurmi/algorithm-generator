@@ -5,7 +5,24 @@ from algorithm_generator import test_algorithms
 tested_algorithm_list = []
 working_algorithm_list = []
 
-test_list = [(4, 2), (9, 3), (25, 5), (49, 7), (121, 11), (169, 13), (213, 71)]
+def gcd(a, b):
+    '''
+    The most simple form of Euclid's method for computing the greatest common divisor.
+    Two positive integers consists of replacing the larger number by the difference of the numbers,
+    and repeating this until the two numbers are equal: that is their greatest common divisor.
+    This method is slow and mainly just reminder here how to create a working algorithm.
+    '''
+    if a == b:
+        return b
+    if a > b:
+        a = a - b
+    else:
+        b = b - a
+    return gcd(a, b)
+
+test_list = []
+for numbers in [[6, 2], [44, 33], [125, 25], [49, 14], [213, 142], [169, 39]]:
+    test_list.append((numbers, gcd(numbers[0], numbers[1])))
 
 try:
     print('Quit the search by pressing ctrl+c (SIGINT)')
