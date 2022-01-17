@@ -6,6 +6,10 @@ See algorithm_generator.py how the algorithm generator works.
 You can test to find an algorithm for your problem:
 
 ```python
+python3 -m pip install sympy
+```
+
+```python
 from algorithm_generator import test_algorithms
 
 tested_algorithm_list = []

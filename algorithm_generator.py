@@ -1,11 +1,12 @@
 ''' Generate and test algorithms '''
 import random
+#import sympy
 
 def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1):
     ''' Returns an algorithm. Examples:
-    0 == 3 ** number % number
-    0 < 1 - number ** number
-    6 - number * 2 != number
+    0 == 3 ** a % a
+    0 < 1 - a ** a
+    6 - a * 2 != a
     '''
     comparions = ['==', '>']
     logic = ['*', '-', '+', '%', '**']
@@ -14,20 +15,30 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
     else:
         operators = logic
     numbers = []
+    variable_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    #a, b, c, d, e, f, g = sympy.symbols(' '.join(variable_list))
     for index in range(0, variable_count):
-        if index == 0:
-            numbers.append('number')
-        else:
-            numbers.append('number' + str(index))
+        numbers.append(variable_list[index])
+    components = []
+    for number in numbers:
+        element = '(%s - 1)' % number
+        components.append(element)
+        element = '(%s + 1)' % number
+        components.append(element)
+        if number != 'a':
+            element = '(%s - a)' % number
+            components.append(element)
+            element = 'abs(%s - a)' % number
+            components.append(element)
+            element = '((%s - a) * (a - %s))' % (number, number)
+            components.append(element)
     numbers = numbers + ['-3', '-2', '-1', '1', '2', '3', '0']
     operation_list = []
     statement_ready = False if statements else True
-    number_ready = False
-    closed_brackets = True
-    index = 0
+    number_ready = 0
+    next_add_number = True
     while True:
-        index = index + 1
-        if index % 2 == 0:
+        if not next_add_number:
             if operation_list[-1] == '0' and operators[-1] == '**':
                 operator = random.choice(operators[0:-1])
             else:
@@ -42,9 +53,11 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
             if operator == '**': # Use ** only once
                 operators.remove(operator)
 
-            if closed_brackets and random.choice([True, False]):
-                operation_list.append('(')
-                closed_brackets = False
+            next_add_number = True
+
+            if random.choice([1, 2, 3, 4]) == 4: # 25% of time add a component
+                operation_list.append(random.choice(components))
+                next_add_number = False # Next must be operator as well
 
         else:
             if operation_list:
@@ -54,31 +67,48 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
                 number = random.choice(numbers)
 
             operation_list.append(number) # Append a number
+            next_add_number = False
 
-            if not number_ready and number == 'number':
-                number_ready = True
+            if number in variable_list:
+                number_ready = number_ready + 1
 
-            if not closed_brackets:
-                operation_list.append(')')
-                closed_brackets = True
-
-            if statement_ready and number_ready and closed_brackets:
+            if statement_ready and number_ready >= variable_count:
                 algo = ' '.join(operation_list)
+                #simple_form = sympy.simplify(eval(' '.join(operation_list)))
+                #algo = str(simple_form)
                 algohash = hash(algo)
                 if not algohash in tested_algorithm_list:
                     tested_algorithm_list.append(algohash)
                     return algo
+
+def Mod(value1, value2):
+    ''' Because sympy wrotes % to Mod() '''
+    return value1 % value2
+
+def Abs(value):
+    ''' Because sympy wrotes abs() to Abs() '''
+    return abs(value)
 
 def algorithm(input, output, algo):
     ''' Execute the algorithm '''
     if isinstance(input, list):
         for index, value in enumerate(input):
             if index == 0:
-                number = value
-            else:
-                vars()['number' + str(index)] = value
+                a = value
+            if index == 1:
+                b = value
+            if index == 2:
+                c = value
+            if index == 3:
+                d = value
+            if index == 4:
+                e == value
+            if index == 5:
+                f == value
+            if index == 6:
+                g == value
     else:
-        number = input
+        a = input
     try:
         return eval(algo) == output
     except Exception as error:

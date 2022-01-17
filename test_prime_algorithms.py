@@ -1,6 +1,6 @@
 ''' Simple way to test isPrime algorithms '''
 
-def isPrime(number, operation):
+def isPrime(a, operation):
     '''
     This is a test prime testing algorithm, for example:
     return 0 < 6 - ((3 % (-2 ** number))) % number
@@ -16,6 +16,14 @@ def isPrime(number, operation):
     return ((2 ** number) % number) < 0.5 ** number + 3 - 1 % number
     '''
     return eval(operation)
+
+def Mod(value1, value2):
+    ''' Because sympy wrotes % to Mod() '''
+    return value1 % value2
+
+def Abs(value):
+    ''' Because sympy wrotes abs() to Abs() '''
+    return abs(value)
 
 def isprime(number):
     ''' This is a working prime number testing algorithm '''
@@ -58,7 +66,7 @@ def print_results(operation):
 
 def main():
     ''' Test some examples '''
-    algo = '0 == 2 - ((2 ** number) % number)'
+    algo = '0 == 2 - ((2 ** a) % a)'
     print_results(algo)
 
 if __name__ == "__main__":
