@@ -61,7 +61,7 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
 
         else:
             if operation_list:
-                if operation_list[-1] == '%' or operation_list[-1] == '(':
+                if operation_list[-1] == '%':
                     number = random.choice(numbers[0:-1]) # Without zero!
             else:
                 number = random.choice(numbers)

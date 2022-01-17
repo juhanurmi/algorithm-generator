@@ -1,28 +1,37 @@
-''' Search factorization algorithm '''
+''' Search algorithm for discrete logarithm problem '''
 import time
+from math import sqrt, ceil
 from algorithm_generator import test_algorithms, simplify
 
 tested_algorithm_list = []
 working_algorithm_list = []
 
-def gcd(a, b):
+def bsgs(g, h, p):
     '''
-    The most simple form of Euclid's method for computing the greatest common divisor.
-    Two positive integers consists of replacing the larger number by the difference of the numbers,
-    and repeating this until the two numbers are equal: that is their greatest common divisor.
-    This method is slow and mainly just reminder here how to create a working algorithm.
+    Solve for x in h = g^x mod p given a prime p.
+    If p is not prime, you shouldn't use BSGS anyway.
+    Example: bsgs(5, 20, 53)) # 11, because 20 = 5**11 % 53
     '''
-    if a == b:
-        return b
-    if a > b:
-        a = a - b
-    else:
-        b = b - a
-    return gcd(a, b)
+    N = ceil(sqrt(p - 1))  # phi(p) is p-1 if p is prime
+
+    # Store hashmap of g^{1...m} (mod p). Baby step.
+    tbl = {pow(g, i, p): i for i in range(N)}
+
+    # Precompute via Fermat's Little Theorem
+    c = pow(g, N * (p - 2), p)
+
+    # Search for an equivalence in the table. Giant step.
+    for j in range(N):
+        y = (h * pow(c, j, p)) % p
+        if y in tbl:
+            return j * N + tbl[y]
+
+    # Solution not found
+    return None
 
 test_list = []
-for numbers in [[6, 2], [44, 33], [125, 25], [49, 14], [213, 142], [169, 39]]:
-    test_list.append((numbers, gcd(numbers[0], numbers[1])))
+for numbers in [[5, 20, 53], [3, 4, 11], [33, 16, 17], [8, 9, 47], [3, 12, 17], [6, 38, 53]]:
+    test_list.append((numbers, bsgs(numbers[0], numbers[1], numbers[2])))
 
 try:
     print('Quit the search by pressing ctrl+c (SIGINT)')
