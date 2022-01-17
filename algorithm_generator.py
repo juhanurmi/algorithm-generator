@@ -1,6 +1,6 @@
 ''' Generate and test algorithms '''
 import random
-#import sympy
+import sympy
 
 def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1):
     ''' Returns an algorithm. Examples:
@@ -80,6 +80,14 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
                 if not algohash in tested_algorithm_list:
                     tested_algorithm_list.append(algohash)
                     return algo
+
+def simplify(expression_string):
+    ''' Simplify an expression with simply '''
+    variable_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    a, b, c, d, e, f, g = sympy.symbols(' '.join(variable_list))
+    comparions = ['==', '>']
+    simple_form = sympy.simplify(eval(expression_string))
+    return str(simple_form)
 
 def Mod(value1, value2):
     ''' Because sympy wrotes % to Mod() '''

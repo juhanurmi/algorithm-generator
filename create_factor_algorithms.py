@@ -1,6 +1,6 @@
 ''' Search factorization algorithm '''
 import time
-from algorithm_generator import test_algorithms
+from algorithm_generator import test_algorithms, simplify
 
 tested_algorithm_list = []
 working_algorithm_list = []
@@ -34,8 +34,10 @@ try:
             start_time = time.time()
         working_algorithm = test_algorithms(test_list, tested_algorithm_list, complexity=1, statements=False)
         if working_algorithm:
-            working_algorithm_list.append(working_algorithm)
-            print(working_algorithm + '\n')
+            simple = simplify(working_algorithm)
+            if not simple in working_algorithm_list:
+                working_algorithm_list.append(simple)
+                print('\n%s\n' % simple)
 except KeyboardInterrupt:
     pass
 
