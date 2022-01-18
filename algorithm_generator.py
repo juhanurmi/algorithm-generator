@@ -16,7 +16,6 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
         operators = logic
     numbers = []
     variable_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-    #a, b, c, d, e, f, g = sympy.symbols(' '.join(variable_list))
     for index in range(0, variable_count):
         numbers.append(variable_list[index])
     components = []
@@ -33,49 +32,52 @@ def algorithm_generator(tested_algorithm_list, statements=True, variable_count=1
             element = '((%s - a) * (a - %s))' % (number, number)
             components.append(element)
     numbers = numbers + ['-3', '-2', '-1', '1', '2', '3', '0']
-    operation_list = []
+    element_list = []
     statement_ready = False if statements else True
     number_ready = 0
     next_add_number = True
     while True:
         if not next_add_number:
-            if operation_list[-1] == '0' and operators[-1] == '**':
-                operator = random.choice(operators[0:-1])
+            if operators[-1] == '**':
+                if element_list[-1] == '0':
+                    operator = random.choice(operators[0:-1])
+                elif '**' in element_list and element_list[-2] == '**':
+                    operator = random.choice(operators[0:-1])
+                else:
+                    operator = random.choice(operators)
             else:
                 operator = random.choice(operators)
 
-            operation_list.append(operator) # Append operator
+            element_list.append(operator) # Append operator
 
             if not statement_ready and operator in comparions:
                 statement_ready = True # This is now a ready to test
                 for comp in comparions:
                     operators.remove(comp)
-            if operator == '**': # Use ** only once
-                operators.remove(operator)
+            if '**' in operators and element_list.count('**') >= 3: # Use ** three times
+                operators.remove('**')
 
             next_add_number = True
 
             if random.choice([1, 2, 3, 4]) == 4: # 25% of time add a component
-                operation_list.append(random.choice(components))
+                element_list.append(random.choice(components))
                 next_add_number = False # Next must be operator as well
 
         else:
-            if operation_list:
-                if operation_list[-1] == '%':
+            if element_list:
+                if element_list[-1] == '%':
                     number = random.choice(numbers[0:-1]) # Without zero!
             else:
                 number = random.choice(numbers)
 
-            operation_list.append(number) # Append a number
+            element_list.append(number) # Append a number
             next_add_number = False
 
             if number in variable_list:
                 number_ready = number_ready + 1
 
             if statement_ready and number_ready >= variable_count:
-                algo = ' '.join(operation_list)
-                #simple_form = sympy.simplify(eval(' '.join(operation_list)))
-                #algo = str(simple_form)
+                algo = ' '.join(element_list)
                 algohash = hash(algo)
                 if not algohash in tested_algorithm_list:
                     tested_algorithm_list.append(algohash)
@@ -85,7 +87,6 @@ def simplify(expression_string):
     ''' Simplify an expression with simply '''
     variable_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
     a, b, c, d, e, f, g = sympy.symbols(' '.join(variable_list))
-    comparions = ['==', '>']
     simple_form = sympy.simplify(eval(expression_string))
     return str(simple_form)
 
