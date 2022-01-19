@@ -1,48 +1,41 @@
-''' Search algorithm for Diffie-Hellman problem:
-Given an element g and the values of g**x and g**y, what is the value of g**xy.
-'''
+''' Search algorithm to calculate phi '''
 import time
 from algorithm_generator import test_algorithms, simplify
 
 tested_algorithm_list = []
 working_algorithm_list = []
 
-def xfromgx(g, gx):
-    '''
-    Input is g and g**x.
-    Slow solver for x.
-    '''
-    exponent = 0
-    while True:
-        exponent = exponent + 1
-        if g**exponent == gx:
-            return exponent
+def gcd(a, b):
+    ''' Calculate the Greatest Common Divisor of a and b. '''
+    if b == 0:
+        return a
+    return gcd(b, a % b)
 
-def gxy(g, gx, gy):
+def phi(n):
     '''
-    Input is g, g**x and g**y.
-    Slow solver for g**xy.
+    For example, the totatives of n = 9 are the six numbers 1, 2, 4, 5, 7 and 8.
+    They are all relatively prime to 9.
+    gcd(9, 1) = 1
+    gcd(9, 2) = 1
+    gcd(9, 4) = 1
+    gcd(9, 5) = 1
+    gcd(9, 7) = 1
+    gcd(9, 8) = 1
+    The other three numbers 3, 6, and 9 are not.
+    gcd(9, 3) = 3
+    gcd(9, 6) = 3
+    gcd(9, 9) = 9.
+    Result is phi(9) = 6.
     '''
-    exponent = 0
-    x = 0
-    y = 0
-    while True:
-        exponent = exponent + 1
-        test = g**exponent
-        if test == gx:
-            x = exponent
-        elif test == gy:
-            y = exponent
-        if x != 0 and y != 0:
-            return g**(x*y)
+    relatively_primes = 0
+    for number in range(1, n + 1): # Numbers 1-n
+        if gcd(n, number) == 1:
+            relatively_primes = relatively_primes + 1
+    return relatively_primes
 
 test_list = []
-for numbers in [[5, 125, 3125], [3, 243, 59049], [33, 39135393, 42618442977], [8, 134217728, 8589934592], [3, 14348907, 10460353203], [6, 2176782336, 13060694016]]:
-    test_list.append((numbers, gxy(numbers[0], numbers[1], numbers[2])))
-
-#test_list = []
-#for numbers in [[5, 125], [3, 243], [33, 39135393], [8, 134217728], [3, 14348907], [6, 2176782336]]:
-#    test_list.append((numbers, xfromgx(numbers[0], numbers[1])))
+for number in [6, 9, 24, 41, 87]:
+    test_list.append((number, phi(number)))
 
 try:
     print('Quit the search by pressing ctrl+c (SIGINT)')
